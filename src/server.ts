@@ -21,8 +21,16 @@ app.get("/palindromo/:frase", (req, res) => {
 });
 
 app.get("/primo/:numero", (req, res) => {
-  const { numero } = req.params
-  res.send(`Hola, el numero ingresado ${esPrimo(+numero) ? "es" : "no es"} un numero primo`);
+  const numero = Number(req.params.numero);
+
+  if (isNaN(numero)) {
+    res.send(`Hola, el valor ingresado "${req.params.numero}" no es un numero`);
+  } else if (numero < 1) {
+    res.send(`Hola, el valor ingresado "${req.params.numero}" no es un numero natural`);
+  } else {
+    res.send(`Hola, el numero ingresado ${esPrimo(+numero) ? "es" : "no es"} un numero primo`);
+  }
+
 });
 
 export default app;

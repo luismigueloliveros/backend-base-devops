@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-base-devops-deployment
+  namespace: devops
+  labels:
+    app: backend-base-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-base-devops
+  template:
+    metadata:
+      labels:
+        app: backend-base-devops
+    spec:
+      containers:
+      - name: backend-base-devops
+        image: localhost:8082/backend-base-devops
+        imagePullPolicy: Always
+        env: 
+        - name: USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: backend-base
+              key: USERNAME
+        ports:
+        - containerPort: 3001
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-base-devops-svc
+  namespace: devops
+  labels:
+    app: backend-base-devops
+spec:
+  selector:
+    app: backend-base-devops
+  ports:
+    - protocol: TCP
+      port: 80
+      port: 3001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: backend-base-devops-ingress
+  namespace: devops
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /backend-path(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend: 
+          service: 
+            name: backend-base-devops-svc
+            port:
+              number: 80
+
+# kubectl.exe apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.2/deploy/static/provider/cloud/deploy.yaml
+
+# kubectl create secret docker-registry regcred --docker-server localhost:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
+# kubectl create secret docker-registry regcred --docker-server 127.0.0.1:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
+
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo update
+# kubectl create ns monitoring --HASTA AQUI LLEGUE
+# helm install prometheus-stack prometheus-community/kube-prometheus-stack -f prometheus-graphana.values --namespace monitoring
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm install --values loki-values.yaml loki grafana/loki --namespace monitoring
