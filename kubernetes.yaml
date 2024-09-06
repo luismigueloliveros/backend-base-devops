@@ -23,8 +23,13 @@ spec:
         - name: USERNAME
           valueFrom:
             configMapKeyRef:
-              name: backend-base
-              key: USERNAME
+              name: backend-base-devops-configmap
+              key: username
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: backend-base-devops-secret
+              key: apikey
         ports:
         - containerPort: 3001
       imagePullSecrets:
@@ -64,15 +69,18 @@ spec:
             name: backend-base-devops-svc
             port:
               number: 80
-
-# kubectl.exe apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.2/deploy/static/provider/cloud/deploy.yaml
-
-# kubectl create secret docker-registry regcred --docker-server localhost:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
-# kubectl create secret docker-registry regcred --docker-server 127.0.0.1:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
-
-# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-# helm repo update
-# kubectl create ns monitoring --HASTA AQUI LLEGUE
-# helm install prometheus-stack prometheus-community/kube-prometheus-stack -f prometheus-graphana.values --namespace monitoring
-# helm repo add grafana https://grafana.github.io/helm-charts
-# helm install --values loki-values.yaml loki grafana/loki --namespace monitoring
+---
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: backend-base-devops-configmap
+data:
+  username: 'Luis Oliveros'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-base-devops-secret
+type: Opaque
+data:
+  apikey: YWRtaW4xMjM=
