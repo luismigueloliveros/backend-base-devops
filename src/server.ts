@@ -4,6 +4,7 @@ import { esPalindromo } from "./palindromo.js";
 import { esPrimo } from "./numeros.js";
 
 const app = express();
+app.disable("x-powered-by");
 
 app.use(express.json());
 
