@@ -44,21 +44,21 @@ pipeline {
                         }
                     }
                     steps {
-                        withSonarQubeEnv('Sonarqube Scanner') {
+                        withSonarQubeEnv('sonarqube') {
                             sh 'sonar-scanner'
                         }
                     }
                 }
                 stage('Quality Gate'){
                     steps {
-                        timeout (time: 10, unit: 'SECONDS'){
+                        timeout (time: 15, unit: 'SECONDS'){
                             waitForQualityGate abortPipeline: true
                         }
                     }
                 }
             }
         }
-        stage('Delivery y Push Registry'){
+        stage('Delivery y push Registry'){
             steps {
                 script {
                     docker.withRegistry('http://localhost:8082', 'nexus-key') {
