@@ -71,9 +71,12 @@ pipeline {
                 }
             }
         }
-        //stage('deploy'){
-            
-            
-        //}
+        stage('Deploy Kubernetes') {
+            steps {
+                script {
+                    sh "kubectl set image deployment backend-base-devops-deployment backend-base-devops=172.26.63.148:8082/backend-base-devops:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                }
+            }
+        }
     }
 }

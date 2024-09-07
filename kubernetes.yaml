@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-base-devops
-        image: localhost:8082/backend-base-devops
+        image: 172.26.63.148:8082/backend-base-devops
         imagePullPolicy: Always
         env: 
         - name: USERNAME
@@ -48,7 +48,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      port: 3001
+      targetPort: 3001
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -84,3 +84,7 @@ metadata:
 type: Opaque
 data:
   apikey: YWRtaW4xMjM=
+
+# kubectl create secret docker-registry regcred --docker-server http://172.26.63.148:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
+
+# kubectl set image deployment backend-base-devops-deployment backend-base-devops=172.26.63.148:8082/backend-base-devops:develop-14
