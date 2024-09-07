@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-base-devops
-        image: 172.26.63.148:8082/backend-base-devops
+        image: localhost:8082/backend-base-devops
         imagePullPolicy: Always
         env: 
         - name: USERNAME
@@ -85,6 +85,6 @@ type: Opaque
 data:
   apikey: YWRtaW4xMjM=
 
-# kubectl create secret docker-registry regcred --docker-server http://172.26.63.148:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
+# kubectl create secret docker-registry regcred --docker-server http://localhost:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
 
-# kubectl set image deployment backend-base-devops-deployment backend-base-devops=172.26.63.148:8082/backend-base-devops:develop-14
+# kubectl set image deployment backend-base-devops-deployment backend-base-devops=localhost:8082/backend-base-devops:develop-14
