@@ -77,8 +77,7 @@ pipeline {
                     agent {
                         docker {
                             image 'bitnami/kubectl:latest'
-                            args '--network="devops-infra_default" --entrypoint='
-                            reuseNode true
+                            args '--entrypoint='
                         }
                     }
                     environment {
