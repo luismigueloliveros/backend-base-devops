@@ -74,6 +74,7 @@ kind: ConfigMap
 apiVersion: v1 
 metadata:
   name: backend-base-devops-configmap
+  namespace: devops
 data:
   username: 'Luis Oliveros'
 ---
@@ -81,10 +82,9 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: backend-base-devops-secret
+  namespace: devops
 type: Opaque
 data:
   apikey: YWRtaW4xMjM=
 
-# kubectl create secret docker-registry regcred --docker-server http://localhost:8082 --docker-username admin --docker-password admin --docker-email contacto.luisoliveros@gmail.com
-
-# kubectl set image deployment backend-base-devops-deployment backend-base-devops=localhost:8082/backend-base-devops:develop-14
+# kubectl create secret docker-registry regcred --docker-server http://localhost:8082 --docker-username admin --docker-password admin123 --docker-email contacto.luisoliveros@gmail.com

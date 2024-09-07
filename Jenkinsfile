@@ -8,7 +8,7 @@ pipeline {
         disableConcurrentBuilds()
     }
     stages {
-        stage('Build and test') {
+        stage('Build and Test Unit') {
             agent {
                 docker {
                     image 'node:20.11.1-alpine3.19' 
@@ -16,17 +16,17 @@ pipeline {
                 }
             }
             stages {
-               stage('Instalar dependencias') {
+               stage('Instalar Dependencias') {
                    steps {
                        sh 'npm install'
                    }
                } 
-                stage('ejecucion de test') {
+                stage('Ejecución de Test Unit') {
                    steps {
                        sh 'npm run test'
                    }
                } 
-                stage('ejecucion de build') {
+                stage('Ejecución de Build') {
                    steps {
                        sh 'npm run build'
                    }
@@ -35,7 +35,7 @@ pipeline {
         }
         stage('Code Quality'){
             stages {
-                stage('SonarQube analysis') {
+                stage('SonarQube Analysis') {
                     agent {
                         docker {
                             image 'sonarsource/sonar-scanner-cli' 
@@ -44,21 +44,21 @@ pipeline {
                         }
                     }
                     steps {
-                        withSonarQubeEnv('sonarqube') {
+                        withSonarQubeEnv('Sonarqube Scanner') {
                             sh 'sonar-scanner'
                         }
                     }
                 }
                 stage('Quality Gate'){
                     steps {
-                        timeout (time: 15, unit: 'SECONDS'){
+                        timeout (time: 10, unit: 'SECONDS'){
                             waitForQualityGate abortPipeline: true
                         }
                     }
                 }
             }
         }
-        stage('delivery'){
+        stage('Delivery y Push Registry'){
             steps {
                 script {
                     docker.withRegistry('http://localhost:8082', 'nexus-key') {
